@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
+<title>第5章 亂世故事卡</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* Layout: one card on screen at a time, era-colored ribbon on top, big thumb buttons at bottom */
+:root{
+  --bg:#EEF1F3; --card:#FFFFFF; --ink:#1B2430; --soft:#5B6673; --line:#D5DBE1;
+  --han:#B7791F; --jin:#C0392B; --south:#11847A; --north:#3D5A98; --tang:#8E44AD; --nature:#4E7D2F;
+  --ok:#1E8E5A; --bad:#C0392B; --hl:#FFE58A;
+  --display:"Noto Serif TC","Songti TC",serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12171D; --card:#1C232C; --ink:#EEF2F6; --soft:#A3AEBA; --line:#2E3742;
+  --han:#E0A94A; --jin:#EF6B5C; --south:#3FC3B5; --north:#7E9BE0; --tang:#C08AE0; --nature:#8CC566;
+  --ok:#45C486; --bad:#EF6B5C; --hl:#6B5A12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12171D; --card:#1C232C; --ink:#EEF2F6; --soft:#A3AEBA; --line:#2E3742;
+  --han:#E0A94A; --jin:#EF6B5C; --south:#3FC3B5; --north:#7E9BE0; --tang:#C08AE0; --nature:#8CC566;
+  --ok:#45C486; --bad:#EF6B5C; --hl:#6B5A12; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+.wrap{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:16px 32px;display:flex;flex-direction:column;gap:14px}
+.tabs{display:flex;gap:8px}
+.tabs button{flex:1;font:700 16px var(--body);padding:12px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--soft);cursor:pointer}
+.tabs button[aria-selected="true"]{border-color:var(--ink);color:var(--ink)}
+.ribbon{display:flex;gap:3px}
+.ribbon i{flex:1;height:8px;border-radius:4px;background:var(--line);opacity:.5;transition:.2s}
+.ribbon i.on{opacity:1}
+.card{background:var(--card);border-radius:18px;padding:22px 20px;border-top:10px solid var(--c,var(--ink));min-height:420px;display:flex;flex-direction:column;gap:14px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.era{align-self:flex-start;font-weight:700;font-size:14px;letter-spacing:.08em;color:#fff;background:var(--c);padding:3px 12px;border-radius:99px}
+h1{font-family:var(--display);font-weight:900;font-size:28px;line-height:1.3;margin:0;text-wrap:balance}
+.flow{display:flex;flex-direction:column;gap:6px}
+.step{background:color-mix(in srgb,var(--c) 12%,var(--card));border-radius:12px;padding:10px 14px;font-weight:500}
+.arrow{text-align:center;color:var(--c);font-weight:900;line-height:1}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--c);color:var(--ink);border-radius:10px;padding:4px 10px;font-weight:700;font-size:15px}
+.label{font-size:13px;font-weight:700;color:var(--soft);letter-spacing:.06em}
+.trap{background:color-mix(in srgb,var(--bad) 10%,var(--card));border-radius:12px;padding:10px 14px;font-size:15px}
+.trap b{color:var(--bad)}
+mark{background:var(--hl);color:inherit;padding:0 3px;border-radius:4px}
+.doors{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.door{border-radius:14px;padding:12px;background:color-mix(in srgb,var(--dc) 13%,var(--card));border:2px solid var(--dc);min-width:0;font-size:15px}
+.door strong{display:block;font-family:var(--display);font-size:19px;color:var(--dc);margin-bottom:4px}
+.nav{display:flex;gap:10px}
+.nav button{flex:1;font:700 18px var(--body);padding:16px;border-radius:14px;border:0;cursor:pointer;background:var(--ink);color:var(--bg)}
+.nav button.ghost{flex:0 0 33%;background:var(--card);color:var(--ink);border:2px solid var(--line)}
+.nav button:disabled{opacity:.35}
+button:focus-visible{outline:3px solid var(--south);outline-offset:2px}
+.count{text-align:center;color:var(--soft);font-size:14px}
+.clue{font-family:var(--display);font-size:24px;font-weight:700;line-height:1.4}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opts button{font:700 18px var(--body);text-align:left;padding:16px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.opts button.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--card))}
+.opts button.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,var(--card))}
+.why{border-radius:12px;padding:12px 14px;background:color-mix(in srgb,var(--ok) 10%,var(--card));font-size:16px}
+.why.no{background:color-mix(in srgb,var(--bad) 10%,var(--card))}
+.score{display:flex;justify-content:space-between;font-weight:700;color:var(--soft);font-size:15px;font-variant-numeric:tabular-nums}
+.big{font-family:var(--display);font-size:56px;font-weight:900;text-align:center;line-height:1}
+@media (prefers-reduced-motion:no-preference){.card{animation:pop .25s ease-out}@keyframes pop{from{transform:translateY(6px);opacity:.6}to{transform:none;opacity:1}}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="tabs" role="tablist">
+    <button id="tabStory" role="tab" aria-selected="true">① 看故事</button>
+    <button id="tabQuiz" role="tab" aria-selected="false">② 關鍵字快問</button>
+  </div>
+  <div class="ribbon" id="ribbon"></div>
+  <div id="stage"></div>
+  <div class="nav" id="nav"></div>
+  <div class="count" id="count"></div>
+</div>
+
+<script>
+const C={han:'var(--han)',jin:'var(--jin)',south:'var(--south)',north:'var(--north)',tang:'var(--tang)',nature:'var(--nature)',ink:'var(--ink)'};
+const F=(arr)=>'<div class="flow">'+arr.map((s,i)=>(i?'<div class="arrow">↓</div>':'')+'<div class="step">'+s+'</div>').join('')+'</div>';
+const K=(arr)=>'<div><div class="label">題目看到這些字</div><div class="chips">'+arr.map(s=>'<span class="chip">'+s+'</span>').join('')+'</div></div>';
+const T=(s)=>'<div class="trap"><b>陷阱：</b>'+s+'</div>';
+
+const cards=[
+ {c:'ink',era:'先看全貌',h:'這章其實只講 4 件事',b:F(['🏃 亂世一來，人就<mark>往南逃</mark>','🔄 胡人和漢人<mark>互相學</mark>對方','🏯 <mark>大家族</mark>說了算，皇帝很弱','🛕 佛寺<mark>多到數不完</mark>'])+'<div class="label">一張卡一個重點，按「下一張」往下翻</div>'},
+ {c:'han',era:'東漢',h:'大家族是怎麼來的？',b:F(['家裡世世代代讀<mark>經學</mark>','靠經學一直當官','變成<mark>累世公卿</mark>＝世家大族'])+K(['累世經學','累世公卿','門生故吏'])+T('世家大族的形成和「佛教」無關')},
+ {c:'han',era:'魏晉南北朝',h:'大家族有 4 種特權',b:F(['① 優先當官（九品官人法）','② 減稅、免稅','③ 占山護澤，搶地盤','④ 結婚要<mark>門當戶對</mark>'])+'<div class="step">例：王元規說「不能因為暫時住這裡就<mark>不顧身分</mark>」，拒絕富豪的女兒 → 富豪想靠婚姻往上爬</div>'},
+ {c:'jin',era:'漢 → 西晉',h:'胡人早就住進中國了',b:F(['<mark>漢代</mark>起，把打輸的胡人遷進關中','<mark>西晉</mark>江統寫〈徙戎論〉：快把他們遷出去！','朝廷沒聽 → 悲劇發生'])+K(['徙戎論','戎狄遷居關中'])},
+ {c:'jin',era:'西晉末',h:'八王之亂 → 五胡亂華',b:F(['西晉皇族自己打起來（八王之亂）','<mark>住在境內</mark>的胡人趁亂起兵','洛陽淪陷，西晉滅亡＝<mark>永嘉之禍</mark>'])+T('不是「境外民族入侵」，也不是「西晉去打邊族」')},
+ {c:'south',era:'東晉',h:'第一次大逃亡：往南跑',b:F(['北方人逃到江南','路上聚族築<mark>塢堡</mark>自保 → 桃花源記的原型','南方又濕又熱 → 很多人得<mark>瘧疾</mark>','江南開始被開發'])+K(['塢堡','結壘避亂','瘧疾','黃淮之間不可居'])},
+ {c:'south',era:'東晉',h:'南方的老闆不是皇帝',b:F(['<mark>王導</mark>拉攏江東士族','北來的人＋南方本地人一起撐住','結果：皇帝沒權，大家族說了算'])+K(['王與馬共天下','政由桓氏，祭則寡人'])+T('「王與馬」不是在誇君臣合作，是說皇帝被架空')},
+ {c:'north',era:'北朝',h:'北方：胡漢互相學',b:F(['漢人學胡人：教兒子<mark>鮮卑語、彈琵琶</mark>（顏氏家訓）','漢人坐胡床、穿褲子、吃涮肉','胡人也慢慢學漢人'])+'<div class="step">判斷口訣：<mark>看「誰」在學「誰的」</mark>東西</div>'},
+ {c:'north',era:'北魏',h:'孝文帝漢化，鮮卑人自己吵起來',b:F(['洛陽的鮮卑人漢化了','邊鎮的鮮卑人沒漢化，被笑是<mark>代北寒人</mark>','邊鎮的人升官難、很不爽','爆發<mark>六鎮之亂</mark> → 北魏分成東魏、西魏'])+T('吵架的是「鮮卑人跟鮮卑人」，不是南朝跟北朝')},
+ {c:'north',era:'西魏',h:'宇文泰打造「關隴集團」',b:F(['重用蘇綽、六條詔書、整頓官員','府兵：軍人跟將領同姓、分土地','胡人政權＋漢人世族綁在一起','後來變成<mark>隋唐</mark>的統治核心'])+K(['宇文泰','蘇綽','軍士從將領之姓'])},
+ {c:'nature',era:'南北朝',h:'佛寺多到數不完',b:'<div class="doors"><div class="door" style="--dc:var(--south)"><strong>南朝 建康</strong>約 500–700 座<br>多是<mark>皇帝、大臣</mark>蓋的</div><div class="door" style="--dc:var(--north)"><strong>北魏 洛陽</strong>1367 座<br>很多是<mark>老百姓</mark>一起蓋的</div></div><div class="step"><mark>義邑</mark>＝老百姓組的佛教團體，一起造佛像、寫經</div>'+K(['邑義','法義','造像','寫經'])},
+ {c:'tang',era:'唐',h:'唐朝很愛胡人，然後出事了',b:F(['大家都穿胡服、化胡妝','重用<mark>胡人將領</mark>','胡將安祿山造反＝<mark>安史之亂</mark>','之後開始強調「夷夏之防」'])+T('「人人穿胡服」是唐代，不是永嘉之禍')},
+ {c:'tang',era:'唐',h:'唐朝打壓老牌大家族',b:F(['唐太宗修《氏族志》：只看現在的官位','唐高宗下<mark>禁婚令</mark>：七姓十家不准互相結婚','目的：不讓大家族靠婚姻結盟'])+'<div class="step">劉知幾《史通》也罵人愛亂標百年前的祖籍（郡望）</div>'},
+ {c:'tang',era:'中唐',h:'第二次南移：南方正式超車',b:F(['安史之亂後北方被打爛','全國水利 80 處，南方占 70','揚州、益州取代長安、洛陽'])+K(['揚一益二','南方超越北方'])},
+ {c:'nature',era:'環境題',h:'大自然也會出題',b:F(['黃河從東漢到唐很安靜 → 上游胡人<mark>農地改牧場</mark>，泥沙變少','竹子越長越南邊 → <mark>氣候變冷</mark>','史書人口突然很少 → 人躲進大家族當<mark>隱戶</mark>'])},
+ {c:'ink',era:'最容易錯',h:'兩次大亂，不要搞混',b:'<div class="doors"><div class="door" style="--dc:var(--jin)"><strong>永嘉之禍</strong>西晉末<br>胡人占北方<br>北人第一次南逃<br>北方胡人漸漢化<br>塢堡、瘧疾、王導</div><div class="door" style="--dc:var(--tang)"><strong>安史之亂</strong>中唐<br>唐代胡風之後<br>開始排外<br>經濟重心<mark>真正</mark>到南方<br>揚一益二</div></div><div class="step">考卷上錯最多的就是這兩個。看到「北方胡族漢化」選永嘉；看到「夷夏之防、揚一益二」選安史。</div>'}
+];
+
+const quiz=[
+ ['教兒子學鮮卑語、彈琵琶，好巴結權貴','漢人胡化','胡人漢化','漢人在學鮮卑人的東西'],
+ ['先是人人愛穿胡服，後來士人大喊「夷夏之防」','安史之亂','永嘉之禍','唐代胡風之後，安祿山造反才開始排外'],
+ ['北人逃到南方，北方的胡族政權慢慢漢化','永嘉之禍後','安史之亂後','安史之亂後北方沒有胡族政權在漢化'],
+ ['南方水利 80 處占 70，揚州益州取代長安洛陽','中唐（安史之亂後）','東晉','東晉時南方還沒超過北方'],
+ ['邊鎮鮮卑被叫「代北寒人」，升官越來越難','六鎮之亂','孝文帝漢化','這是六鎮之亂的背景'],
+ ['「王與馬共天下」','皇帝沒權，大家族說了算','君臣同心治國','王＝琅琊王氏，馬＝司馬家皇帝'],
+ ['籠絡江東士族，結合南北力量抵抗外侮','王導','劉裕','東晉宰相王導'],
+ ['邑義、造像、齋會、寫經','佛教','道教','造佛像、寫佛經'],
+ ['累世公卿的家族，家傳的學問','經學','玄學','漢代靠經學當官'],
+ ['軍人跟將領同姓、分土地，結合胡人政權和漢人世族','關隴集團（宇文泰）','北魏孝文帝','西魏宇文泰的府兵'],
+ ['大臣上〈徙戎論〉要把戎狄趕出關中','西晉','東漢','江統，西晉惠帝時'],
+ ['把戰敗的戎狄遷進關中，從什麼時候開始？','漢代','北魏','漢代就開始內遷胡人'],
+ ['東漢到唐，黃河幾乎沒有大災','上游胡人農地改牧場','朝廷治水很成功','植被回來，泥沙變少'],
+ ['竹子產地一路往南退','氣候變冷','竹子沒人要了','竹子怕冷'],
+ ['庾衮保禹山、蘇峻結壘、郗鑒避嶧山','桃花源記','赤壁賦','都是築塢堡避亂'],
+ ['史書記的人口比實際少很多','隱戶太多','人真的死光了','百姓躲進大家族，不在官府戶籍上'],
+ ['唐太宗修《氏族志》、高宗下禁婚令','打壓大家族','鼓勵大家族通婚','不讓舊士族靠婚姻結盟'],
+ ['北方人南遷後，醫書多了瘧疾的記載','南方濕熱','北方傳染','北方人不習慣南方的濕熱'],
+ ['孝文帝漢化後，邊區鮮卑不認同漢化的國家祭典','鮮卑人之間有隔閡','南北朝對立','洛陽鮮卑 vs. 邊區鮮卑'],
+ ['五胡亂華的性質','境內胡人趁內亂起兵','境外民族入侵','五胡早就住在中國境內']
+];
+
+const $=id=>document.getElementById(id);
+let mode='story', i=0;
+let q={order:[],pos:0,right:0,tries:0,answered:false};
+
+function shuffle(a){for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a}
+
+function renderStory(){
+  const d=cards[i];
+  $('ribbon').innerHTML=cards.map((x,k)=>`<i class="${k<=i?'on':''}" style="background:${C[x.c]}"></i>`).join('');
+  $('stage').innerHTML=`<article class="card" style="--c:${C[d.c]}"><span class="era">${d.era}</span><h1>${d.h}</h1>${d.b}</article>`;
+  $('nav').innerHTML=`<button class="ghost" id="prev" ${i===0?'disabled':''}>上一張</button><button id="next">${i===cards.length-1?'去快問 →':'下一張'}</button>`;
+  $('count').textContent=`${i+1} / ${cards.length}`;
+  $('prev').onclick=()=>{if(i>0){i--;renderStory()}};
+  $('next').onclick=()=>{if(i<cards.length-1){i++;renderStory()}else setMode('quiz')};
+  try{localStorage.setItem('ch5card',i)}catch(e){}
+}
+
+function startQuiz(){q={order:shuffle(quiz.map((_,k)=>k)),pos:0,right:0,tries:0,answered:false}}
+
+function renderQuiz(){
+  $('ribbon').innerHTML='';
+  if(q.pos>=q.order.length){
+    $('stage').innerHTML=`<article class="card" style="--c:var(--ok)"><span class="era">完成</span><div class="big">${q.right}/${q.tries}</div><h1>全部答對過一次了！</h1><div class="step">答錯的題目剛剛已經重出一次。想再練，按「再玩一次」。</div></article>`;
+    $('nav').innerHTML='<button id="again">再玩一次</button>';
+    $('count').textContent='';
+    $('again').onclick=()=>{startQuiz();renderQuiz()};
+    return;
+  }
+  const [clue,a,b,why]=quiz[q.order[q.pos]];
+  const opts=shuffle([a,b]);
+  $('stage').innerHTML=`<article class="card" style="--c:var(--north)"><div class="score"><span>第 ${q.pos+1} 題 / 剩 ${q.order.length-q.pos-1} 題</span><span>答對 ${q.right}</span></div><div class="label">題目看到這句話</div><div class="clue">「${clue}」</div><div class="opts">${opts.map(o=>`<button data-o="${o}">${o}</button>`).join('')}</div><div id="why"></div></article>`;
+  $('nav').innerHTML='';
+  $('count').textContent='答錯的題目會在後面再出現一次';
+  q.answered=false;
+  document.querySelectorAll('.opts button').forEach(btn=>btn.onclick=()=>{
+    if(q.answered)return; q.answered=true; q.tries++;
+    const ok=btn.dataset.o===a;
+    document.querySelectorAll('.opts button').forEach(x=>{if(x.dataset.o===a)x.classList.add('right')});
+    if(ok){q.right++}else{btn.classList.add('wrong');q.order.push(q.order[q.pos])}
+    $('why').innerHTML=`<div class="why ${ok?'':'no'}"><b>${ok?'✓ 對！':'✗ 答案是「'+a+'」'}</b><br>${why}</div>`;
+    $('nav').innerHTML='<button id="nq">下一題</button>';
+    $('nq').onclick=()=>{q.pos++;renderQuiz()};
+  });
+}
+
+function setMode(m){
+  mode=m;
+  $('tabStory').setAttribute('aria-selected',m==='story');
+  $('tabQuiz').setAttribute('aria-selected',m==='quiz');
+  if(m==='story')renderStory();else{startQuiz();renderQuiz()}
+  window.scrollTo(0,0);
+}
+$('tabStory').onclick=()=>setMode('story');
+$('tabQuiz').onclick=()=>setMode('quiz');
+
+let sx=null;
+$('stage').addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
+$('stage').addEventListener('touchend',e=>{
+  if(mode!=='story'||sx===null)return;
+  const dx=e.changedTouches[0].clientX-sx; sx=null;
+  if(dx<-60&&i<cards.length-1){i++;renderStory()}
+  if(dx>60&&i>0){i--;renderStory()}
+});
+
+try{const s=parseInt(localStorage.getItem('ch5card'));if(s>=0&&s<cards.length)i=s}catch(e){}
+renderStory();
+</script>
+</body>
+</html>
